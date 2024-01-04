@@ -1,5 +1,3 @@
-import { Header } from "@/components/desktop/DesktopHeader";
-
 export default function Home() {
   return (
     <>
