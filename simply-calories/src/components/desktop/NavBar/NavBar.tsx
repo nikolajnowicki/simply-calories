@@ -4,7 +4,9 @@ export const NavBar = () => {
   return (
     <nav>
       <NavBarButton text="Home" href="/"></NavBarButton>
-      <NavBarButton text="new" href="/new"></NavBarButton>
+      <NavBarButton text="BMR Calculator" href="/bmr-calc"></NavBarButton>
+      <NavBarButton text="Trackers" href="/calorie-tracker"></NavBarButton>
+      <NavBarButton text="Recipes" href="/recipes"></NavBarButton>
     </nav>
   );
 };
