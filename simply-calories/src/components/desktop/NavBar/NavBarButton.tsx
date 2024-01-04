@@ -8,7 +8,7 @@ type NavBarButtonProps = {
 export const NavBarButton = (props: NavBarButtonProps) => {
   return (
     <Link href={props.href}>
-      <button className="p-4 m-4 bg-white dark:bg-gray-700">
+      <button className="px-4 py-1 mx-1 bg-transparent dark:bg-gray-700">
         {props.text}
       </button>
     </Link>
