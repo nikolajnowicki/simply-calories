@@ -2,20 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+/* Light mode styles */
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-color: #ffffff; 
+  --text-color: #030303b6; 
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
+/* Dark mode styles */
+.dark {
+  --background-color: #323136; 
+  --text-color: #ffffff; 
 
+}
 
 html, body {
     height: 100%;
@@ -26,4 +27,6 @@ html, body {
     display: flex;
     align-items: center; 
     flex-direction: column; 
+    background-color: var(--background-color);
+    color: var(--text-color);
   }

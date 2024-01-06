@@ -17,7 +17,7 @@ export default function ThemeSwitcher() {
 
   return (
     <button
-      className="flex justify-center items-center w-6 h-6 cursor-pointer bg-transparent border-none p-0"
+      className="flex justify-center items-center w-6 h-6 cursor-pointer bg-transparent border-none p-0 mr-4"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label="Toggle Theme"
     >

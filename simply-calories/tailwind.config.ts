@@ -9,6 +9,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      spacing: {
+        "0.5": "0.125rem",
+        "0.25": "0.0625rem",
+        px: "1px",
+      },
       colors: {
         // Light Theme
 
@@ -20,11 +25,12 @@ const config: Config = {
 
         // Dark Theme
 
-        DarkbgCol: "#161A30",
+        DarkbgCol: "#121212",
         DarkPrimaryCol: "#31304D",
         DarkSecondaryCol: "#B6BBC4",
-        DarkUiCol: "#36454F",
+        DarkUiCol: "#121212",
         DarkTextCol: "#F0ECE5",
+        DarkTextCol2: "#FFBF00",
 
         // Universal
 
