@@ -17,11 +17,12 @@ const config: Config = {
       colors: {
         // Light Theme
 
-        LightbgCol: "#161A30",
-        LightPrimaryCol: "#31304D",
+        LightbgCol: "#b3e4f0",
+        LightPrimaryCol: "#365486",
         LightSecondaryCol: "#B6BBC4",
-        LightUiCol: "#fffff",
-        LightTextCol: "#F0ECE5",
+        LightUiCol: "#DCF2F1",
+        LightTextCol: "#0F1035",
+        LightTextCol2: "#1A1A56",
 
         // Dark Theme
 
@@ -29,7 +30,7 @@ const config: Config = {
         DarkPrimaryCol: "#31304D",
         DarkSecondaryCol: "#B6BBC4",
         DarkUiCol: "#121212",
-        DarkTextCol: "#F0ECE5",
+        DarkTextCol: "#FFFFFF",
         DarkTextCol2: "#FFBF00",
 
         // Universal

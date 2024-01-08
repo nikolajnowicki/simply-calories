@@ -6,7 +6,7 @@
 
 /* Light mode styles */
 :root {
-  --background-color: #ffffff; 
+  --background-color: #b3e4f0; 
   --text-color: #030303b6; 
 
 }
@@ -30,3 +30,4 @@ html, body {
     background-color: var(--background-color);
     color: var(--text-color);
   }
+

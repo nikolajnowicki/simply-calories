@@ -11,7 +11,7 @@ const dropdownItems = [
 
 export const NavBar = () => {
   return (
-    <nav className="flex flex-row justify-between items-center w-full h-16 shadow-lg rounded-xl bg-DarkUiCol">
+    <nav className="flex flex-row justify-between items-center  w-full h-16 shadow-lg rounded-xl bg-LightUiCol dark:bg-DarkUiCol">
       <ul className="flex">
         <NavBarButton text="Home" href="/" />
         <NavBarButton text="BMR Calculator" href="/bmr-calc" />
