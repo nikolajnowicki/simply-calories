@@ -3,6 +3,7 @@ import Link from "next/link";
 type NavBarButtonProps = {
   text: string;
   href: string;
+  className?: string;
 };
 
 export const NavBarButton = ({ text, href }: NavBarButtonProps) => {
