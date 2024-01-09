@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/desktop/DesktopHeader";
 import Providers from "./providers";
+import { MobileHeader } from "@/components/mobile/MobileNavBar,tsx/MobileHeader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <Header></Header>
+          <div className="hidden md:flex md:justify-center md:w-full">
+            <Header></Header>
+          </div>
+
+          <div className="md:hidden">
+            <MobileHeader></MobileHeader>
+          </div>
+
           {children}
         </Providers>
       </body>
