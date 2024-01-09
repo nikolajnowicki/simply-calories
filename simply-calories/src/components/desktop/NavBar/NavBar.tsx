@@ -4,9 +4,14 @@ import { NavBarButtonDropdown } from "./NavBarButtonDropDown";
 import { LogInButton } from "./LoginButton";
 import { RegisterButton } from "./RegisterButton";
 
-const dropdownItems = [
+const TrackersItems = [
   { text: "Calorie Tracker", href: "/calorie-tracker" },
   { text: "Fasting Tracker", href: "/fasting-tracker" },
+];
+
+const RecipesItems = [
+  { text: "Find Recipes", href: "/recipes" },
+  { text: "My Recipes", href: "/recipes/my-recipes" },
 ];
 
 export const NavBar = () => {
@@ -15,13 +20,11 @@ export const NavBar = () => {
       <ul className="flex">
         <NavBarButton text="Home" href="/" />
         <NavBarButton text="BMR Calculator" href="/bmr-calc" />
-        <NavBarButtonDropdown text="Trackers" dropdownItems={dropdownItems} />
-        <NavBarButton text="Recipes" href="/recipes" />
+        <NavBarButtonDropdown text="Trackers" dropdownItems={TrackersItems} />
+        <NavBarButtonDropdown text="Recipes" dropdownItems={RecipesItems} />
       </ul>
 
       <div className="flex items-center h-full">
-        {/* <NavBarButton text="Register" href="/register" />
-        <NavBarButton text="Login" href="/login" /> */}
         <RegisterButton text="Register" href="/register"></RegisterButton>
         <LogInButton text="Login" href="/login"></LogInButton>
 
