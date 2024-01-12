@@ -1,8 +1,13 @@
+"use client";
+
 import ThemeSwitcher from "@/components/shared/ThemeSwitcher";
 import { NavBarButton } from "./NavBarButton";
 import { NavBarButtonDropdown } from "./NavBarButtonDropDown";
 import { LogInButton } from "./LoginButton";
 import { RegisterButton } from "./RegisterButton";
+import { useModal } from "@/hooks/useModal";
+import LoginModal from "@/components/shared/modals/Login/LoginModal";
+import RegisterModal from "@/components/shared/modals/Register/RegisterModal";
 
 const TrackersItems = [
   { text: "Calorie Tracker", href: "/calorie-tracker" },
@@ -15,6 +20,18 @@ const RecipesItems = [
 ];
 
 export const NavBar = () => {
+  const {
+    isOpen: isLoginOpen,
+    openModal: openLogin,
+    closeModal: closeLogin,
+  } = useModal();
+
+  const {
+    isOpen: isRegisterOpen,
+    openModal: openRegister,
+    closeModal: closeRegister,
+  } = useModal();
+
   return (
     <nav className="flex flex-row justify-between items-center  w-full h-16 shadow-lg rounded-xl bg-LightUiCol dark:bg-DarkUiCol">
       <ul className="flex">
@@ -25,8 +42,13 @@ export const NavBar = () => {
       </ul>
 
       <div className="flex items-center h-full">
-        <RegisterButton text="Register" href="/register"></RegisterButton>
-        <LogInButton text="Login" href="/login"></LogInButton>
+        <RegisterButton text="Register" onClick={openRegister}></RegisterButton>
+        <RegisterModal
+          isOpen={isRegisterOpen}
+          onClose={closeRegister}
+        ></RegisterModal>
+        <LogInButton text="Login" onClick={openLogin}></LogInButton>
+        <LoginModal isOpen={isLoginOpen} onClose={closeLogin}></LoginModal>
 
         <ThemeSwitcher />
       </div>
