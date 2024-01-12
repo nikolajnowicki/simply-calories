@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/desktop/DesktopHeader";
 import Providers from "./providers";
 import { MobileHeader } from "@/components/mobile/MobileHeader/MobileHeader";
+import { Footer } from "@/components/shared/footer/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,6 +30,10 @@ export default function RootLayout({
           </div>
 
           {children}
+
+          <div className="mt-auto flex justify-center w-full md:pb-4">
+            <Footer></Footer>
+          </div>
         </Providers>
       </body>
     </html>
