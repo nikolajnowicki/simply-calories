@@ -5,6 +5,7 @@ import { Header } from "@/components/desktop/DesktopHeader";
 import Providers from "./providers";
 import { MobileHeader } from "@/components/mobile/MobileHeader/MobileHeader";
 import { Footer } from "@/components/shared/footer/Footer";
+import AuthProvider from "@/components/shared/AuthProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,21 +21,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <div className="hidden md:flex md:justify-center md:w-full">
-            <Header></Header>
-          </div>
+        <AuthProvider>
+          <Providers>
+            <div className="hidden md:flex md:justify-center md:w-full">
+              <Header></Header>
+            </div>
 
-          <div className="w-full md:hidden">
-            <MobileHeader></MobileHeader>
-          </div>
+            <div className="w-full md:hidden">
+              <MobileHeader></MobileHeader>
+            </div>
 
-          {children}
+            {children}
 
-          <div className="mt-auto flex justify-center w-full md:pb-4">
-            <Footer></Footer>
-          </div>
-        </Providers>
+            <div className="mt-auto flex justify-center w-full md:pb-4">
+              <Footer></Footer>
+            </div>
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   );
