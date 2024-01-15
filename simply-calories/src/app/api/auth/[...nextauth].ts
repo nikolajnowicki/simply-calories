@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Account, AuthOptions, Profile, Session, User } from "next-auth";
-import prisma from "../../../lib/prisma";
+import prisma from "../../lib/prisma";
 import { JWT } from "next-auth/jwt";
 
 export const authOptions: AuthOptions = {
