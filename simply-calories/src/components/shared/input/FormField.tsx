@@ -3,7 +3,7 @@ import React from "react";
 type FormFieldProps = {
   label: string;
   type: string;
-  error?: string | null;
+  error?: string;
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -24,8 +24,11 @@ const FormField: React.FC<FormFieldProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`mb-4 ${className}`}>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
+    <div className={`mb-2 ${className}`}>
+      <label
+        htmlFor={name}
+        className="block text-sm font-medium text-gray-700 pb-2"
+      >
         {label}
       </label>
       <input
@@ -36,11 +39,17 @@ const FormField: React.FC<FormFieldProps> = ({
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
-        className={`px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:border-primary ${
+        className={`px-3 py-1 border rounded-md shadow-sm  md:w-72 focus:outline-none focus:ring focus:border-primary ${
           error ? "border-red-500" : "border-gray-300"
         }`}
       />
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      <div className="min-h-[20px] mt-1">
+        {error ? (
+          <p className="text-red-500 text-xs flex">{error}</p>
+        ) : (
+          <div className="h-5"></div>
+        )}
+      </div>
     </div>
   );
 };
