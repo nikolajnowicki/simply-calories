@@ -59,7 +59,7 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
               <button
                 type="submit"
-                className="bg-blue-500 text-white py-2 px-4 mt-2"
+                className="bg-blue-500 text-white py-3 px-4 mt-2"
               >
                 Login
               </button>
