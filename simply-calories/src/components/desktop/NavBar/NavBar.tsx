@@ -9,6 +9,7 @@ import LoginModal from "@/components/shared/modals/Login/LoginModal";
 import RegisterModal from "@/components/shared/modals/Register/RegisterModal";
 import { LogInButton } from "./LoginButton";
 import { RegisterButton } from "./RegisterButton";
+import { LogOutButton } from "./LogOutButton";
 
 const TrackersItems = [
   { text: "Calorie Tracker", href: "/calorie-tracker" },
@@ -51,7 +52,8 @@ export const NavBar = () => {
       <div className="flex items-center h-full">
         {session ? (
           <>
-            <button onClick={handleLogout}>Logout</button>
+            {/* <button onClick={handleLogout}>Logout</button> */}
+            <LogOutButton text="Logout" onClick={handleLogout}></LogOutButton>
             <p>Signed in as {session.user?.email}</p>
           </>
         ) : (
