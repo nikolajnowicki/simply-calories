@@ -1,32 +1,38 @@
-import NextAuth from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
-import * as bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import prisma from "@/app/lib/prisma";
 import { Account, AuthOptions, Profile, Session, User } from "next-auth";
-import prisma from "../../lib/prisma";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { JWT } from "next-auth/jwt";
+import NextAuth from "next-auth/next";
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
+
       credentials: {
-        username: {
-          label: "Username",
+        email: {
+          label: "Email",
           type: "text",
-          placeholder: "<USERNAME>",
+          placeholder: "your@email.com",
         },
-        password: { label: "Password", type: "password" },
+        password: {
+          label: "Password",
+          type: "password",
+        },
       },
       authorize: async (credentials) => {
         if (!credentials) {
           return null;
         }
 
-        const { username, password } = credentials;
+        const { email, password } = credentials;
 
         const user = await prisma.user.findUnique({
-          where: { username },
+          where: {
+            email,
+          },
         });
 
         if (!user) {
@@ -34,19 +40,20 @@ export const authOptions: AuthOptions = {
         }
 
         const userPassword = user.passwordHash;
+
         const isValidPassword = bcrypt.compareSync(password, userPassword);
 
-        if (isValidPassword) {
-          return user;
-        } else {
+        if (!isValidPassword) {
           return null;
         }
+
+        return user;
       },
     }),
   ],
   pages: {
-    signIn: "/login",
-    signOut: "/logout",
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
   },
   secret: process.env.NEXTAUTH_SECRET,
   jwt: {
@@ -70,8 +77,8 @@ export const authOptions: AuthOptions = {
   },
   session: {
     strategy: "jwt",
-    maxAge: 8 * 60 * 60,
-    updateAge: 2 * 60 * 60,
+    maxAge: 30 * 24 * 60 * 60,
+    updateAge: 24 * 60 * 60,
   },
   callbacks: {
     async session(params: { session: Session; token: JWT; user: User }) {

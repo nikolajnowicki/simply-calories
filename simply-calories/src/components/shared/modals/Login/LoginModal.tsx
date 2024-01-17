@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FormField from "../../input/FormField";
+import { signIn } from "next-auth/react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -12,14 +13,31 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
     email: "",
     password: "",
   });
+  const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    try {
+      const signInResponse = await signIn("credentials", {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
+
+      if (!signInResponse || signInResponse.ok !== true) {
+        setMessage("Invalid credentials");
+      } else {
+        onClose();
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleForgotPasswordClick = () => {
@@ -33,8 +51,8 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0  bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white px-20 py-12 rounded-lg  flex flex-col items-center justify-center ">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white px-20 py-12 rounded-lg flex flex-col items-center justify-center">
         {step === "login" ? (
           <>
             <h2 className="text-lg font-bold">Login</h2>
@@ -66,6 +84,7 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             </form>
             <button onClick={onClose}>Close</button>
             <p onClick={handleForgotPasswordClick}>Forgot your password?</p>
+            <p>{message}</p> {/* Display error message */}
           </>
         ) : (
           <>
