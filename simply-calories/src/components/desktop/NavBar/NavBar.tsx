@@ -3,11 +3,12 @@
 import ThemeSwitcher from "@/components/shared/ThemeSwitcher";
 import { NavBarButton } from "./NavBarButton";
 import { NavBarButtonDropdown } from "./NavBarButtonDropDown";
-import { LogInButton } from "./LoginButton";
-import { RegisterButton } from "./RegisterButton";
 import { useModal } from "@/hooks/useModal";
+import { useSession, signOut } from "next-auth/react";
 import LoginModal from "@/components/shared/modals/Login/LoginModal";
 import RegisterModal from "@/components/shared/modals/Register/RegisterModal";
+import { LogInButton } from "./LoginButton";
+import { RegisterButton } from "./RegisterButton";
 
 const TrackersItems = [
   { text: "Calorie Tracker", href: "/calorie-tracker" },
@@ -32,8 +33,14 @@ export const NavBar = () => {
     closeModal: closeRegister,
   } = useModal();
 
+  const { data: session } = useSession();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
   return (
-    <nav className="flex flex-row justify-between items-center  w-full h-16 shadow-lg rounded-xl bg-LightUiCol dark:bg-DarkUiCol">
+    <nav className="flex flex-row justify-between items-center w-full h-16 shadow-lg rounded-xl bg-LightUiCol dark:bg-DarkUiCol">
       <ul className="flex">
         <NavBarButton text="Home" href="/" />
         <NavBarButton text="BMR Calculator" href="/bmr-calc" />
@@ -42,13 +49,25 @@ export const NavBar = () => {
       </ul>
 
       <div className="flex items-center h-full">
-        <RegisterButton text="Register" onClick={openRegister}></RegisterButton>
-        <RegisterModal
-          isOpen={isRegisterOpen}
-          onClose={closeRegister}
-        ></RegisterModal>
-        <LogInButton text="Login" onClick={openLogin}></LogInButton>
-        <LoginModal isOpen={isLoginOpen} onClose={closeLogin}></LoginModal>
+        {session ? (
+          <>
+            <button onClick={handleLogout}>Logout</button>
+            <p>Signed in as {session.user?.email}</p>
+          </>
+        ) : (
+          <>
+            <RegisterButton
+              text="Register"
+              onClick={openRegister}
+            ></RegisterButton>
+            <RegisterModal
+              isOpen={isRegisterOpen}
+              onClose={closeRegister}
+            ></RegisterModal>
+            <LogInButton text="Login" onClick={openLogin}></LogInButton>
+            <LoginModal isOpen={isLoginOpen} onClose={closeLogin}></LoginModal>
+          </>
+        )}
 
         <ThemeSwitcher />
       </div>
