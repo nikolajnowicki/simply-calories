@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import FormField from "../../input/FormField";
 import { signIn } from "next-auth/react";
+import Spinner from "../../Spinner";
+import { LogInButton } from "@/components/desktop/NavBar/LoginButton";
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,11 +10,8 @@ interface ModalProps {
 }
 
 const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
-  const [step, setStep] = useState<"login" | "forgotPassword">("login");
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +21,7 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const signInResponse = await signIn("credentials", {
@@ -37,15 +37,10 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
       }
     } catch (err) {
       console.error(err);
+      setMessage("An error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleForgotPasswordClick = () => {
-    setStep("forgotPassword");
-  };
-
-  const handleBackToLoginClick = () => {
-    setStep("login");
   };
 
   if (!isOpen) return null;
@@ -53,56 +48,42 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white px-20 py-12 rounded-lg flex flex-col items-center justify-center">
-        {step === "login" ? (
-          <>
-            <h2 className="text-lg font-bold">Login</h2>
-            <form onSubmit={handleSubmit}>
-              <FormField
-                label="Email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-              />
+        <h2 className="text-lg font-bold">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <FormField
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Enter your email"
+          />
 
-              <FormField
-                label="Password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Enter your password"
-              />
+          <FormField
+            label="Password"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Enter your password"
+          />
 
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <div className="flex justify-between pt-4">
+              <LogInButton text="Login" type="submit" />
               <button
-                type="submit"
-                className="bg-blue-500 text-white py-3 px-4 mt-2"
+                onClick={onClose}
+                className="text-red-700 border-b-2 hover:text-textError"
               >
-                Login
+                Close
               </button>
-            </form>
-            <button onClick={onClose}>Close</button>
-            <p onClick={handleForgotPasswordClick}>Forgot your password?</p>
-            <p>{message}</p> {/* Display error message */}
-          </>
-        ) : (
-          <>
-            <h2 className="text-lg font-bold">Forgot Your Password?</h2>
-            <p>Enter your email to reset your password.</p>
-            <form>
-              <FormField
-                label="Email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Enter your email"
-              />
-            </form>
-            <button onClick={handleBackToLoginClick}>Back to Login</button>
-          </>
-        )}
+            </div>
+          )}
+        </form>
+        <p className="pt-4 text-textError ">{message}</p>{" "}
+        {/* Display error message */}
       </div>
     </div>
   );
