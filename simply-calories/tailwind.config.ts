@@ -22,7 +22,8 @@ const config: Config = {
         LightbgCol: "#b3e4f0",
         LightPrimaryCol: "#365486",
         LightSecondaryCol: "#B6BBC4",
-        LightUiCol: "#DCF2F1",
+        LightUiCol: "#e2e8f0",
+        LightUiCol2: "#DCF2F1",
         LightTextCol: "#0F1035",
         LightTextCol2: "#1A1A56",
 
