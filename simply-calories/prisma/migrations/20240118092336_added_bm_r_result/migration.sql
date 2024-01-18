@@ -1,0 +1,18 @@
+-- CreateTable
+CREATE TABLE "BMRResult" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "height" DOUBLE PRECISION NOT NULL,
+    "weight" DOUBLE PRECISION NOT NULL,
+    "gender" TEXT NOT NULL,
+    "activityLevel" TEXT NOT NULL,
+    "deficitLevel10" DOUBLE PRECISION NOT NULL,
+    "deficitLevel20" DOUBLE PRECISION NOT NULL,
+    "deficitLevel30" DOUBLE PRECISION NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "BMRResult_pkey" PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "BMRResult" ADD CONSTRAINT "BMRResult_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
