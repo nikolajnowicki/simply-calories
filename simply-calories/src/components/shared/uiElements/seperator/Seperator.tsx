@@ -19,7 +19,7 @@ const Separator: React.FC<SeparatorProps> = ({
   };
 
   return (
-    <div className="flex items-center space-x-4 py-8 text-sm md:text-lg text-LightTextCols dark:text-DarkTextCol">
+    <div className="flex items-center space-x-4 pt-8 pb-4 text-sm md:text-lg text-LightTextCols dark:text-DarkTextCol">
       {tabs.map((tab, index) => (
         <React.Fragment key={tab}>
           {index > 0 && <span className="text-gray-400">|</span>}{" "}
