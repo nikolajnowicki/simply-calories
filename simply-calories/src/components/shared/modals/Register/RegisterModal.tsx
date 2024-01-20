@@ -87,10 +87,10 @@ const RegisterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white px-20 py-12 rounded-lg flex flex-col items-center justify-center">
+      <div className="bg-LightUiCol2 dark:bg-DarkUiCol px-20 py-12 rounded-lg flex flex-col items-center justify-center">
         {step === "register" && (
           <>
-            <h2 className="text-lg font-bold pb-4">Register</h2>
+            <h2 className="text-lg font-bold pb-8">Register</h2>
             <form onSubmit={handleSubmit} className="w-full">
               <FormField
                 label="Username"
@@ -156,7 +156,7 @@ const RegisterModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
             </p>
             <button
               onClick={handleClose}
-              className="mt-4 text-red-700 border-b-2 hover:text-textError"
+              className="mt-4 text-red-700  pt-8 hover:text-textError"
             >
               Close
             </button>

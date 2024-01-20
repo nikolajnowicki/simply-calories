@@ -17,16 +17,37 @@ model User {
   bmrResults   BMRResult[]
 }
 
+// model BMRResult {
+//   id             String   @id @default(cuid())
+//   user           User     @relation(fields: [userId], references: [id])
+//   userId         String
+//   height         Float
+//   weight         Float
+//   gender         String
+//   activityLevel  String
+//   deficitLevel10 Float
+//   deficitLevel20 Float
+//   deficitLevel30 Float
+//   createdAt      DateTime @default(now())
+// }
+
 model BMRResult {
-  id             String   @id @default(cuid())
-  user           User     @relation(fields: [userId], references: [id])
-  userId         String
-  height         Float
-  weight         Float
-  gender         String
-  activityLevel  String
-  deficitLevel10 Float
-  deficitLevel20 Float
-  deficitLevel30 Float
-  createdAt      DateTime @default(now())
+  id                        String   @id @default(cuid())
+  user                      User     @relation(fields: [userId], references: [id])
+  userId                    String
+  height                    Float
+  weight                    Float
+  gender                    String
+  activityLevel             String
+  tdee                      Float
+  deficitLevel10            Float
+  deficitLevel20            Float
+  deficitLevel30            Float
+  calculatedValueCalories10 Float
+  calculatedValueKilos10    Float
+  calculatedValueCalories20 Float
+  calculatedValueKilos20    Float
+  calculatedValueCalories30 Float
+  calculatedValueKilos30    Float
+  createdAt                 DateTime @default(now())
 }

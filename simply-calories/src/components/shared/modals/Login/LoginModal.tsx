@@ -47,8 +47,8 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white px-20 py-12 rounded-lg flex flex-col items-center justify-center">
-        <h2 className="text-lg font-bold">Login</h2>
+      <div className="bg-LightUiCol dark:bg-DarkUiCol px-20 py-12 rounded-lg flex flex-col items-center justify-center">
+        <h2 className="text-lg font-bold pb-8">Login</h2>
         <form onSubmit={handleSubmit}>
           <FormField
             label="Email"
@@ -75,7 +75,7 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
               <LogInButton text="Login" type="submit" />
               <button
                 onClick={onClose}
-                className="text-red-700 border-b-2 hover:text-textError"
+                className=" text-red-700   hover:text-textError"
               >
                 Close
               </button>
@@ -83,7 +83,6 @@ const LoginModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           )}
         </form>
         <p className="pt-4 text-textError ">{message}</p>{" "}
-        {/* Display error message */}
       </div>
     </div>
   );

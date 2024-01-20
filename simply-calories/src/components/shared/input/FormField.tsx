@@ -27,7 +27,7 @@ const FormField: React.FC<FormFieldProps> = ({
     <div className={`mb-2 ${className}`}>
       <label
         htmlFor={name}
-        className="block text-sm font-medium text-gray-700 pb-2"
+        className="block text-sm font-medium text-LightTextCol dark:text-DarkTextCol pb-2"
       >
         {label}
       </label>
@@ -40,7 +40,7 @@ const FormField: React.FC<FormFieldProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         className={`px-3 py-1 border rounded-md shadow-sm  md:w-72 focus:outline-none focus:ring focus:border-primary ${
-          error ? "border-red-500" : "border-gray-300"
+          error ? "border-red-500" : "border-gray-300 dark:border-DarkUiCol"
         }`}
       />
       <div className="min-h-[20px] mt-1">

@@ -4,8 +4,7 @@ const InformationTab: React.FC = () => {
   return (
     <div className="flex flex-col">
       <section className="px-8 md:px-12">
-        <h2 className="flex justify-center pb-8">Information</h2>
-        <h3 className="font-bold pb-4">What is BMR?</h3>
+        <h3 className="font-bold pb-4 pt-12">What is BMR?</h3>
         <p>
           BMR, or Basal Metabolic Rate, is the minimum number of calories
           required to maintain essential bodily functions while at rest. It
