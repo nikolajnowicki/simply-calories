@@ -86,8 +86,7 @@ const InformationTab: React.FC = () => {
           <li className="py-4">
             <span className="font-semibold">Heart Health:</span> Some studies
             suggest that intermittent fasting may improve cardiovascular health
-            by reducing risk factors like cholesterol levels and blood
-            pressure..
+            by reducing risk factors like cholesterol levels and blood pressure.
           </li>
           <li className="py-4">
             <span className="font-semibold">Cellular Autophagy:</span> Fasting
@@ -112,9 +111,9 @@ const InformationTab: React.FC = () => {
           <li className="py-4">
             <span className="font-semibold">
               Consult a Healthcare Professional:
-            </span>
-            Before starting any fasting regimen, it's essential to consult with
-            a healthcare provider, especially if you have underlying health
+            </span>{" "}
+            Before starting any fasting regimen, it&apos;s essential to consult
+            with a healthcare provider, especially if you have underlying health
             conditions or are pregnant/nursing.
           </li>
           <li className="py-4">
@@ -131,12 +130,12 @@ const InformationTab: React.FC = () => {
           <li className="py-4">
             <span className="font-semibold">Listen to Your Body:</span> Pay
             attention to how your body responds to fasting. If you experience
-            severe discomfort or negative effects, it's essential to reconsider
-            your fasting schedule.
+            severe discomfort or negative effects, it&apos;s essential to
+            reconsider your fasting schedule.
           </li>
           <li className="py-4">
             <span className="font-semibold">Long-Term Sustainability:</span>{" "}
-            Intermittent fasting may not be suitable for everyone, and it's
+            Intermittent fasting may not be suitable for everyone, and it&apos;s
             important to find an approach that fits your lifestyle and
             preferences.
           </li>
@@ -144,11 +143,11 @@ const InformationTab: React.FC = () => {
 
         <p className="pt-8 pb-20 font-semibold">
           Remember that fasting and intermittent fasting may not be suitable for
-          everyone, and individual results can vary. It's crucial to approach
-          fasting with a well-informed and personalized approach to ensure it
-          aligns with your health goals and needs. Always consult a healthcare
-          professional before making significant dietary changes or starting a
-          fasting regimen.
+          everyone, and individual results can vary. It&apos;s crucial to
+          approach fasting with a well-informed and personalized approach to
+          ensure it aligns with your health goals and needs. Always consult a
+          healthcare professional before making significant dietary changes or
+          starting a fasting regimen.
         </p>
       </section>
     </div>
