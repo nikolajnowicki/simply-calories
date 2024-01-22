@@ -1,4 +1,3 @@
-// Fetch user data function
 export const fetchUserData = async (userEmail: string) => {
   try {
     const res = await fetch("/api/user", {
