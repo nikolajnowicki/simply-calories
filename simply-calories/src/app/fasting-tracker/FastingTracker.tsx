@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import useFastingTimer from "../../hooks/useFastingTimer";
 import { BiStopwatch } from "react-icons/bi";
 import { GoGoal } from "react-icons/go";
+import { useSession } from "next-auth/react";
+import { saveFastingData } from "../../app/actions/users/saveFastingData";
 
 type FastingTrackerProps = {};
 
@@ -19,14 +21,67 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
   const [fastingStartTime, setFastingStartTime] = useState<Date | null>(null);
   const [fastCompleted, setFastCompleted] = useState<boolean>(false);
   const [elapsedFastingTime, setElapsedFastingTime] = useState<string>("");
+  const [progress, setProgress] = useState<number>(0);
+  const { data: session } = useSession();
 
-  const { progress, setEndTime } = useFastingTimer(
+  const { setEndTime } = useFastingTimer(fastingEndTime, totalDuration);
+
+  const storeFastingStateInLocalStorage = useCallback(() => {
+    const fastingState = {
+      fasting,
+      fastingStartTime: fastingStartTime?.getTime(),
+      fastingEndTime: fastingEndTime?.getTime(),
+      totalDuration,
+    };
+    localStorage.setItem("fastingState", JSON.stringify(fastingState));
+  }, [fasting, fastingStartTime, fastingEndTime, totalDuration]);
+
+  const loadFastingStateFromLocalStorage = () => {
+    const fastingState = localStorage.getItem("fastingState");
+    if (fastingState) {
+      const parsedState = JSON.parse(fastingState);
+      const {
+        fasting: savedFasting,
+        fastingStartTime: savedFastingStartTime,
+        fastingEndTime: savedFastingEndTime,
+        totalDuration: savedTotalDuration,
+      } = parsedState;
+
+      if (savedFasting) {
+        const currentTime = new Date().getTime();
+        const elapsedDuration = currentTime - savedFastingStartTime;
+        const remainingDuration = savedTotalDuration - elapsedDuration;
+        const newFastingEndTime = new Date(currentTime + remainingDuration);
+
+        setFasting(savedFasting);
+        setFastingStartTime(new Date(savedFastingStartTime));
+        setFastingEndTime(newFastingEndTime);
+        setTotalDuration(savedTotalDuration);
+
+        const progressPercent = (elapsedDuration / savedTotalDuration) * 100;
+        setProgress(progressPercent);
+      }
+    }
+  };
+
+  useEffect(() => {
+    loadFastingStateFromLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    if (fasting) {
+      storeFastingStateInLocalStorage();
+    }
+  }, [
+    fasting,
+    fastingStartTime,
     fastingEndTime,
-    totalDuration
-  );
+    totalDuration,
+    storeFastingStateInLocalStorage,
+  ]);
 
   const endFast = useCallback(
-    (automaticallyEnded: boolean = false) => {
+    async (automaticallyEnded: boolean = false) => {
       if (fasting) {
         const now = new Date();
         let elapsedTime =
@@ -37,19 +92,31 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
         elapsedTime -= elapsedHours * (1000 * 60 * 60);
         const elapsedMinutes = Math.floor(elapsedTime / (1000 * 60));
 
-        setElapsedFastingTime(
-          `${elapsedHours.toString().padStart(2, "0")}:${elapsedMinutes
-            .toString()
-            .padStart(2, "0")}`
-        );
+        const fastingDuration = `${elapsedHours
+          .toString()
+          .padStart(2, "0")}:${elapsedMinutes.toString().padStart(2, "0")}`;
+        setElapsedFastingTime(fastingDuration);
         setFastCompleted(true);
         setFasting(false);
         setEndTime(null);
         setTotalDuration(null);
         setFastingStartTime(null);
+
+        localStorage.removeItem("fastingState");
+
+        if (session?.user?.email) {
+          try {
+            await saveFastingData({
+              email: session.user.email,
+              fastingDuration,
+            });
+          } catch (error) {
+            console.error("Failed to save fasting data", error);
+          }
+        }
       }
     },
-    [fasting, fastingStartTime, setEndTime]
+    [fasting, fastingStartTime, setEndTime, session?.user?.email]
   );
 
   useEffect(() => {
@@ -57,11 +124,21 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
       const now = new Date();
       if (fastingEndTime && now >= fastingEndTime && fasting) {
         endFast(true);
+      } else if (fastingStartTime && fastingEndTime && fasting) {
+        const currentTime = now.getTime();
+        const elapsedDuration = currentTime - fastingStartTime.getTime();
+        const remainingDuration = fastingEndTime.getTime() - currentTime;
+
+        if (remainingDuration >= 0) {
+          const progressPercent =
+            (elapsedDuration / (totalDuration || 1)) * 100;
+          setProgress(progressPercent);
+        }
       }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [fastingEndTime, fasting, endFast]);
+  }, [fastingEndTime, fastingStartTime, totalDuration, fasting, endFast]);
 
   const startFast = ({
     customHour,
@@ -86,6 +163,9 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
         setFasting(true);
         setEndTime(endTime);
         reset();
+
+        setFastCompleted(false);
+        setElapsedFastingTime("");
       }
     }
   };
@@ -95,18 +175,20 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
   };
 
   function calculateRemainingTime(): string {
-    if (!fastingEndTime || !totalDuration) return "00:00";
+    if (!fastingEndTime || !totalDuration) return "00:00:00";
     const now = new Date();
     let remainingTime = fastingEndTime.getTime() - now.getTime();
-    if (remainingTime <= 0) return "00:00";
+    if (remainingTime <= 0) return "00:00:00";
 
     const hours = Math.floor(remainingTime / (1000 * 60 * 60));
     remainingTime -= hours * (1000 * 60 * 60);
     const minutes = Math.floor(remainingTime / (1000 * 60));
+    remainingTime -= minutes * (1000 * 60);
+    const seconds = Math.floor(remainingTime / 1000);
 
     return `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
-      .padStart(2, "0")}`;
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   }
 
   watch((value, { name }) => {
@@ -173,8 +255,8 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
           <div className="mb-4">
             <div className="flex flex-col justify-center items-center">
               <div className="flex flex-row justify-center items-center pt-8 pb-4">
-                <div className="flex flex-wrap items-center">
-                  <div className="text-3xl ">
+                <div className="flex flex-wrap items-center pl-1">
+                  <div className="text-3xl pr-1 ">
                     <BiStopwatch />
                   </div>
 
@@ -193,8 +275,8 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
             </div>
 
             <div className="pr-2">
-              <div className="flex flex-wrap justify-center items-center  pb-8">
-                <div className="text-2xl pr-2">
+              <div className="flex flex-wrap justify-center items-center pt-8 pb-12">
+                <div className="text-2xl pr-3">
                   <GoGoal />
                 </div>
                 <p className="font-bold ">
@@ -234,14 +316,22 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
         )}
 
         {fastCompleted && (
-          <div className="mb-4">
-            <p>Fast is complete! You fasted: {elapsedFastingTime}</p>
+          <div className="flex flex-col justify-center items-center pt-8 b-4">
+            <p className="font-bold pb-2">Fast is complete!</p>
+            <div className="flex flex-wrap">
+              <p>You fasted for:</p>
+              <p className="font-semibold pl-2">{elapsedFastingTime}</p>
+            </div>
           </div>
         )}
 
         {!fastCompleted && !fasting && elapsedFastingTime && (
-          <div className="mb-4">
-            <p>Fast ended early. You fasted for: {elapsedFastingTime}</p>
+          <div className="flex flex-col justify-center items-center pt-8 b-4">
+            <p className="font-bold pb-2">Fast ended early.</p>
+            <div className="flex flex-wrap">
+              <p>You fasted for:</p>
+              <p className="font-semibold pl-2">{elapsedFastingTime}</p>
+            </div>
           </div>
         )}
       </div>
