@@ -9,27 +9,14 @@ datasource db {
 }
 
 model User {
-  id           String      @id @default(cuid())
-  username     String      @unique
-  passwordHash String
-  name         String?
-  email        String      @unique
-  bmrResults   BMRResult[]
+  id             String          @id @default(cuid())
+  username       String          @unique
+  passwordHash   String
+  name           String?
+  email          String          @unique
+  bmrResults     BMRResult[]
+  fastingResults FastingResult[]
 }
-
-// model BMRResult {
-//   id             String   @id @default(cuid())
-//   user           User     @relation(fields: [userId], references: [id])
-//   userId         String
-//   height         Float
-//   weight         Float
-//   gender         String
-//   activityLevel  String
-//   deficitLevel10 Float
-//   deficitLevel20 Float
-//   deficitLevel30 Float
-//   createdAt      DateTime @default(now())
-// }
 
 model BMRResult {
   id                        String   @id @default(cuid())
@@ -50,4 +37,12 @@ model BMRResult {
   calculatedValueCalories30 Float
   calculatedValueKilos30    Float
   createdAt                 DateTime @default(now())
+}
+
+model FastingResult {
+  id              Int      @id @default(autoincrement())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  fastingDuration String
+  createdAt       DateTime @default(now())
 }
