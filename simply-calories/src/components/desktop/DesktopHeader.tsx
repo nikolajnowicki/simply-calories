@@ -1,5 +1,12 @@
+"use client";
+
+import { SearchBar } from "../shared/uiElements/searchBar/SearchBar";
 import { DesktopLogo } from "./NavBar/DesktopLogo";
 import { NavBar } from "./NavBar/NavBar";
+
+const handleSearch = async (query: string) => {
+  console.log("Search query:", query);
+};
 
 export const Header = () => {
   return (
@@ -8,6 +15,7 @@ export const Header = () => {
         <DesktopLogo></DesktopLogo>
       </div>
       <NavBar></NavBar>
+      <SearchBar onSubmit={handleSearch}></SearchBar>
     </header>
   );
 };

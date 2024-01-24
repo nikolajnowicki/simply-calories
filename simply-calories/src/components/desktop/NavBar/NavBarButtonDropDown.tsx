@@ -46,7 +46,7 @@ export const NavBarButtonDropdown = ({
 
   return (
     <div
-      className="relative inline-block"
+      className="relative inline-block z-10"
       ref={dropdownRef}
       onMouseEnter={() => setIsOpen(true)}
       onMouseLeave={() => setIsOpen(false)}
