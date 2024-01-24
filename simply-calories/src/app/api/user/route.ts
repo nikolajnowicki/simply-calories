@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     const user = await prisma.user.findUnique({
       where: { email },
       include: {
-        bmrResults: true, // Include associated BMR results
+        bmrResults: true,
       },
     });
 
