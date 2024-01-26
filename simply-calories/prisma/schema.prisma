@@ -9,13 +9,15 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(cuid())
-  username       String          @unique
-  passwordHash   String
-  name           String?
-  email          String          @unique
-  bmrResults     BMRResult[]
-  fastingResults FastingResult[]
+  id              String            @id @default(cuid())
+  username        String            @unique
+  passwordHash    String
+  name            String?
+  email           String            @unique
+  caloricGoal     Float?
+  bmrResults      BMRResult[]
+  fastingResults  FastingResult[]
+  foodConsumption FoodConsumption[]
 }
 
 model BMRResult {
@@ -45,4 +47,16 @@ model FastingResult {
   userId          String
   fastingDuration String
   createdAt       DateTime @default(now())
+}
+
+model FoodConsumption {
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+  foodName     String
+  amount       Float
+  calories     Float
+  dateConsumed DateTime @default(now())
+
+  @@index([userId, dateConsumed])
 }
