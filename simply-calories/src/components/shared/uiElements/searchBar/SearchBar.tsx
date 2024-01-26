@@ -1,28 +1,37 @@
+"use client";
+
+import React from "react";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { IoSearchSharp } from "react-icons/io5";
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  FieldValues,
-} from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useSearchResults } from "../../SearchProvider";
+
+interface FormData {
+  query: string;
+}
 
 interface SearchBarProps {
   onSubmit: (query: string) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control, reset } = useForm<FormData>();
+  const router = useRouter();
+  const { setResults } = useSearchResults();
 
-  const handleFormSubmit: SubmitHandler<FieldValues> = async (formData) => {
-    const query = formData.query;
+  const handleFormSubmit: SubmitHandler<FormData> = async (formData) => {
+    onSubmit(formData.query);
 
     try {
       const response = await fetch(
-        `/api/food?query=${encodeURIComponent(query)}`
+        `/api/food?query=${encodeURIComponent(formData.query)}`
       );
       if (response.ok) {
         const data = await response.json();
-        onSubmit(data);
+        console.log("Fetched data:", data);
+        setResults(data);
+        router.push("/result");
+        reset();
       } else {
         console.error("Server error:", response.statusText);
       }

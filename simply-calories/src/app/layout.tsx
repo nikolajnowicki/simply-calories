@@ -6,6 +6,7 @@ import Providers from "./providers";
 import { MobileHeader } from "@/components/mobile/MobileHeader/MobileHeader";
 import { Footer } from "@/components/shared/footer/Footer";
 import AuthProvider from "@/components/shared/AuthProvider";
+import { SearchResultsProvider } from "@/components/shared/SearchProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,19 +21,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body className={inter.className}>
         <AuthProvider>
           <Providers>
-            <div className="hidden md:flex md:justify-center md:w-full">
-              <Header></Header>
-            </div>
+            <SearchResultsProvider>
+              <div className="hidden md:flex md:justify-center md:w-full">
+                <Header></Header>
+              </div>
 
-            <div className="w-full md:hidden">
-              <MobileHeader></MobileHeader>
-            </div>
+              <div className="w-full md:hidden">
+                <MobileHeader></MobileHeader>
+              </div>
 
-            {children}
+              {children}
 
-            <div className="mt-auto flex justify-center w-full md:pb-4">
-              <Footer></Footer>
-            </div>
+              <div className="mt-auto flex justify-center w-full md:pb-4">
+                <Footer></Footer>
+              </div>
+            </SearchResultsProvider>
           </Providers>
         </AuthProvider>
       </body>
