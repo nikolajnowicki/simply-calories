@@ -25,4 +25,14 @@ export interface User {
   name: string | null;
   email: string;
   bmrResults: BMRResult[];
+  foodConsumption: foodConsumption[];
+}
+
+export interface foodConsumption {
+  id: string;
+  userId: string;
+  foodName: string;
+  amount: number;
+  calories: number;
+  dateConsumed: string;
 }
