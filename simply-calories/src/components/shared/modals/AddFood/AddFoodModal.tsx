@@ -1,6 +1,5 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import Spinner from "../../Spinner";
 
 interface ModalProps {
   isOpen: boolean;
@@ -24,8 +23,8 @@ const AddFoodModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
     const amount = parseFloat(data.amount);
     if (!isNaN(amount) && amount > 0) {
       onSubmit(amount);
-      onClose();
       reset();
+      onClose();
     }
   };
 
@@ -46,6 +45,7 @@ const AddFoodModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
             <input
               id="amount"
               type="text"
+              autoFocus
               {...register("amount", {
                 required: "Amount is required",
                 pattern: {
