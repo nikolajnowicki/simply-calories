@@ -32,7 +32,7 @@ const AddFoodModal: React.FC<ModalProps> = ({ isOpen, onClose, onSubmit }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-10">
-      <div className="bg-white dark:bg-gray-800 px-20 py-12 rounded-lg shadow-lg flex flex-col items-center">
+      <div className="bg-LightUiCol dark:bg-DarkUiCol px-20 py-12 rounded-lg flex flex-col items-center justify-center">
         <h2 className="text-lg font-bold pb-4">Add Food Amount</h2>
         <form onSubmit={handleSubmit(submitForm)} className="w-full max-w-xs">
           <div className="mb-4">
