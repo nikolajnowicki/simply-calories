@@ -11,6 +11,11 @@ export async function POST(request: NextRequest) {
       include: {
         bmrResults: true,
         foodConsumption: true,
+        recipes: {
+          include: {
+            ingredients: true,
+          },
+        },
       },
     });
 

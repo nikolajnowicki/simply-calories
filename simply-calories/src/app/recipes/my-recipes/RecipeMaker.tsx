@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { ParsedFood } from "../../../models/ApiResponse";
 import AddFoodModal from "../../../components/shared/modals/AddFood/AddFoodModal";
 import { useModal } from "../../../hooks/useModal";
+import { useSession } from "next-auth/react";
+import { saveRecipeData } from "@/app/actions/users/saveRecipeData";
+import Image from "next/image";
 
 interface RecipeIngredient extends ParsedFood {
   amount: number;
@@ -20,10 +23,19 @@ const RecipeMaker: React.FC = () => {
   const [totalCalories, setTotalCalories] = useState<number>(0);
   const [inputError, setInputError] = useState<string>("");
   const ingredientInputRef = useRef<HTMLInputElement>(null);
+  const { data: session } = useSession();
 
   const handleEditInstructions = () => {
     setStep(2);
   };
+
+  const convertFileToBase64 = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
 
   const handleSearchSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -55,11 +67,24 @@ const RecipeMaker: React.FC = () => {
       setInputError("Please enter a valid food item.");
       return;
     }
+
     const { ENERC_KCAL } = selectedFood.food.nutrients;
-    const calories = amount * (ENERC_KCAL / 100);
-    const newIngredient: RecipeIngredient = { ...selectedFood, amount };
+    const caloriesForAmountUsed = (ENERC_KCAL * amount) / 100;
+
+    const newIngredient: RecipeIngredient = {
+      ...selectedFood,
+      amount: amount,
+      food: {
+        ...selectedFood.food,
+        nutrients: {
+          ...selectedFood.food.nutrients,
+          ENERC_KCAL: caloriesForAmountUsed,
+        },
+      },
+    };
+
     setIngredients([...ingredients, newIngredient]);
-    setTotalCalories(totalCalories + calories);
+    setTotalCalories((prevTotal) => prevTotal + caloriesForAmountUsed);
     setIngredientName("");
     setInputError("");
     closeModal();
@@ -87,11 +112,50 @@ const RecipeMaker: React.FC = () => {
     ingredientInputRef.current?.focus();
   }, [ingredients]);
 
+  const handleSubmitRecipe = async () => {
+    if (
+      !recipeName.trim() ||
+      !recipeInstructions.trim() ||
+      ingredients.length === 0
+    ) {
+      console.error("All recipe fields are required.");
+      return;
+    }
+
+    if (!session?.user?.email) {
+      console.error("User must be logged in to submit a recipe.");
+      return;
+    }
+
+    try {
+      const imageBase64 = recipeImage
+        ? await convertFileToBase64(recipeImage)
+        : undefined;
+
+      const savedRecipe = await saveRecipeData({
+        email: session.user.email,
+        name: recipeName,
+        instructions: recipeInstructions,
+        totalCalories: totalCalories,
+        ingredients: ingredients.map((ingredient) => ({
+          name: ingredient.food.label,
+          amount: ingredient.amount,
+          calories: ingredient.food.nutrients.ENERC_KCAL,
+        })),
+        image: imageBase64,
+      });
+
+      console.log("Recipe saved successfully:", savedRecipe);
+    } catch (error) {
+      console.error("Error saving recipe:", error);
+    }
+  };
+
   const renderStepContent = () => {
     switch (step) {
       case 1:
         return (
-          <div>
+          <div className="pt-8 ">
             <form
               onSubmit={handleSearchSubmit}
               className="flex flex-col gap-2 mb-4"
@@ -129,20 +193,17 @@ const RecipeMaker: React.FC = () => {
             />
             <ul>
               {ingredients.map((ingredient, index) => (
-                <li
-                  key={index}
-                  className="flex flex-col md:flex-row md:justify-between items-center space-y-1 md:space-y-0 space-x-0 md:space-x-4 mb-2"
-                >
-                  <div className="md:flex-1 flex items-baseline">
-                    <span className="font-semibold mr-1">
-                      {ingredient.food.label}
-                    </span>
-                    <span>{`${ingredient.amount}g`}</span>
-                  </div>
-                  <span className="font-semibold md:flex-none whitespace-nowrap">{`${Math.round(
-                    ingredient.amount *
-                      (ingredient.food.nutrients.ENERC_KCAL / 100)
-                  )}cal`}</span>
+                <li key={index} className="flex justify-between">
+                  <span>
+                    <strong>{`${ingredient.food.label}`}</strong>{" "}
+                    {`${ingredient.amount}g`}
+                  </span>
+                  <span>
+                    <strong>{`${Math.round(
+                      ingredient.food.nutrients.ENERC_KCAL
+                    )} `}</strong>
+                    cal
+                  </span>
                 </li>
               ))}
             </ul>
@@ -198,7 +259,7 @@ const RecipeMaker: React.FC = () => {
                     : "bg-green-500 text-white hover:bg-green-600"
                 } p-2 rounded mt-4 transition-colors duration-300 ease-in-out`}
               >
-                Next
+                Next Step
               </button>
             </div>
           </div>
@@ -206,43 +267,29 @@ const RecipeMaker: React.FC = () => {
       case 3:
         return (
           <div className="max-w-xl mx-auto">
-            <h2 className="text-2xl font-bold mb-4">Recipe Overview</h2>
-            <p className="text-lg mb-2">{recipeName}</p>
+            <h2 className="text-2xl font-bold mb-8 text-center">
+              Recipe Overview
+            </h2>
+            <p className="text-lg font-bold mb-8">
+              {recipeName.charAt(0).toUpperCase() + recipeName.slice(1)}
+            </p>
 
             {imagePreviewUrl && (
               <div className="mb-4">
-                <h3 className="text-lg font-semibold">Image Preview:</h3>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={imagePreviewUrl}
+                  height={400}
+                  width={400}
                   alt="Recipe"
-                  className="max-w-full h-auto"
                 />
               </div>
             )}
 
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold py-4">Instructions:</h3>
-              <div className="whitespace-pre-line break-words">
-                {recipeInstructions}
-              </div>
-
-              <button
-                onClick={handleEditInstructions}
-                className="text-blue-500 underline  mt-2"
-              >
-                Edit Instructions
-              </button>
-            </div>
-
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold py-4 ">Ingredients:</h3>
+            <div className="mb-2 max-w-sm">
+              <h3 className="text-lg font-semibold pb-2 pt-4">Ingredients:</h3>
               <ul className="flex flex-col justify-between">
                 {ingredients.map((ingredient, index) => (
-                  <li
-                    key={index}
-                    className="mb-2 flex justify-between md:justify-normal md:gap-16"
-                  >
+                  <li key={index} className="mb-2 flex justify-between ">
                     <div className="flex justift-between">
                       <span className="font-semibold">
                         {ingredient.food.label}
@@ -260,9 +307,37 @@ const RecipeMaker: React.FC = () => {
               </ul>
             </div>
 
-            <button className="bg-green-500 text-white p-2 rounded mt-4">
-              Submit Recipe
-            </button>
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold pb-2 pt-4">
+                Total Calories:
+              </h3>
+              <p className="font-semibold">{`${Math.round(
+                totalCalories
+              )} cal`}</p>
+            </div>
+
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold py-4">Instructions:</h3>
+              <div className="whitespace-pre-line break-words">
+                {recipeInstructions}
+              </div>
+
+              <button
+                onClick={handleEditInstructions}
+                className="text-blue-500 underline  mt-2"
+              >
+                Edit Instructions
+              </button>
+            </div>
+
+            <div className="flex justify-center">
+              <button
+                onClick={handleSubmitRecipe}
+                className="bg-green-500 text-white p-2 rounded mt-4"
+              >
+                Submit Recipe
+              </button>
+            </div>
           </div>
         );
 

@@ -1,11 +1,13 @@
 // next.config.js
 
-/**
- * @type {import('next').NextConfig}
- */
 const nextConfig = {
   images: {
     domains: ["www.edamam.com", "edamam-product-images.s3.amazonaws.com"],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "4mb",
+    },
   },
 };
 

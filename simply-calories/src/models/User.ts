@@ -26,6 +26,7 @@ export interface User {
   email: string;
   bmrResults: BMRResult[];
   foodConsumption: foodConsumption[];
+  recipes: Recipe[];
 }
 
 export interface foodConsumption {
@@ -35,4 +36,24 @@ export interface foodConsumption {
   amount: number;
   calories: number;
   dateConsumed: string;
+}
+
+export interface Recipe {
+  id: string;
+  userId: string;
+  name: string;
+  image: string | null;
+  instructions: string;
+  totalCalories: number;
+  createdAt: Date;
+  updatedAt: Date;
+  ingredients: Ingredient[];
+}
+
+export interface Ingredient {
+  id: string;
+  recipeId: string;
+  name: string;
+  amount: number;
+  calories: number;
 }
