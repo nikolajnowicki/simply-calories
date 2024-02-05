@@ -4,6 +4,7 @@ import { User, Recipe, Ingredient } from "../../../models/User";
 import { fetchUserData } from "../../actions/users/fetchUserData";
 import { FaArrowLeft } from "react-icons/fa";
 import Image from "next/image";
+import Spinner from "@/components/shared/Spinner";
 
 const MyRecipeTab: React.FC = () => {
   const { data: session } = useSession();
@@ -34,7 +35,7 @@ const MyRecipeTab: React.FC = () => {
   }, [userData, session?.user?.email]);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (error) {

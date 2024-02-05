@@ -198,7 +198,7 @@ export const FastingTrackerCalc: React.FC<FastingTrackerProps> = () => {
   });
 
   return (
-    <div className="pt-2 md:pt-10">
+    <div className="pt-2 md:pt-4">
       <div className="flex flex-col items-center justify-center">
         {!fasting && (
           <div className="mb-4 flex flex-col items-center justify-center">

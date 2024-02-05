@@ -1,15 +1,15 @@
 "use client";
 
-import ThemeSwitcher from "@/components/shared/ThemeSwitcher";
 import { NavBarButton } from "./NavBarButton";
 import { NavBarButtonDropdown } from "./NavBarButtonDropDown";
 import { useModal } from "@/hooks/useModal";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import LoginModal from "@/components/shared/modals/Login/LoginModal";
 import RegisterModal from "@/components/shared/modals/Register/RegisterModal";
 import { LogInButton } from "./LoginButton";
 import { RegisterButton } from "./RegisterButton";
-import { LogOutButton } from "./LogOutButton";
+import { UserButton } from "./UserMenu";
+import { useUserData } from "@/hooks/useUserData";
 
 const TrackersItems = [
   { text: "Calorie Tracker", href: "/calorie-tracker" },
@@ -35,10 +35,7 @@ export const NavBar = () => {
   } = useModal();
 
   const { data: session } = useSession();
-
-  const handleLogout = async () => {
-    await signOut();
-  };
+  const user = useUserData();
 
   return (
     <nav className="flex flex-row justify-between items-center w-full h-16 shadow-lg rounded-xl bg-LightUiCol dark:bg-DarkUiCol">
@@ -52,9 +49,17 @@ export const NavBar = () => {
       <div className="flex items-center h-full">
         {session ? (
           <>
-            {/* <button onClick={handleLogout}>Logout</button> */}
-            <LogOutButton text="Logout" onClick={handleLogout}></LogOutButton>
-            <p>Signed in as {session.user?.email}</p>
+            <div className="pr-3">
+              {user && (
+                <div className="font-bold text-lg pt-1 text-LightTextCol/80 dark:text-DarkTextCol/90">
+                  <p>
+                    {user.username.charAt(0).toUpperCase() +
+                      user.username.slice(1)}
+                  </p>
+                </div>
+              )}
+            </div>
+            <UserButton></UserButton>
           </>
         ) : (
           <>
@@ -70,8 +75,6 @@ export const NavBar = () => {
             <LoginModal isOpen={isLoginOpen} onClose={closeLogin}></LoginModal>
           </>
         )}
-
-        <ThemeSwitcher />
       </div>
     </nav>
   );
