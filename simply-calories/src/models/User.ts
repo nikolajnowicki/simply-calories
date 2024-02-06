@@ -24,6 +24,7 @@ export interface User {
   passwordHash: string;
   name: string | null;
   email: string;
+  caloricGoal: number;
   bmrResults: BMRResult[];
   foodConsumption: foodConsumption[];
   recipes: Recipe[];
