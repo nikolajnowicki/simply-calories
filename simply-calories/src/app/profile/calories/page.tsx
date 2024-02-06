@@ -49,16 +49,20 @@ export default function CaloricProgress() {
   }>({});
   const [weeklyTotal, setWeeklyTotal] = useState<number>(0);
   const [weeklyAverage, setWeeklyAverage] = useState<number>(0);
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
 
   useEffect(() => {
-    const handleResize = () => {
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        setScreenWidth(window.innerWidth);
+      };
+
       setScreenWidth(window.innerWidth);
-    };
 
-    window.addEventListener("resize", handleResize);
+      window.addEventListener("resize", handleResize);
 
-    return () => window.removeEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
   useEffect(() => {
