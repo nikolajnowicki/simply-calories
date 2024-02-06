@@ -32,7 +32,7 @@ export const UserButton = () => {
 
   const userMenuItems = [
     { text: "Profile", href: "/profile" },
-    { text: "Settings", href: "/settings" },
+    { text: "Calories", href: "/profile/calories" },
   ];
 
   return (
