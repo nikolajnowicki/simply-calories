@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { ParsedFood } from "../../../models/ApiResponse";
 import AddFoodModal from "../../../components/shared/modals/AddFood/AddFoodModal";
 import { useModal } from "../../../hooks/useModal";
@@ -24,6 +25,7 @@ const RecipeMaker: React.FC = () => {
   const [inputError, setInputError] = useState<string>("");
   const ingredientInputRef = useRef<HTMLInputElement>(null);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const handleEditInstructions = () => {
     setStep(2);
@@ -145,7 +147,8 @@ const RecipeMaker: React.FC = () => {
         image: imageBase64,
       });
 
-      console.log("Recipe saved successfully:", savedRecipe);
+      alert("Recipe saved successfully!");
+      router.push("/recipes/my-recipes");
     } catch (error) {
       console.error("Error saving recipe:", error);
     }

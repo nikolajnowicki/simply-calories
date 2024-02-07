@@ -113,7 +113,7 @@ const MyRecipeTab: React.FC = () => {
                     </div>
                   )}
                 </div>
-                <div className="w-64  p-1">
+                <div className="w-64  p-1 dark:bg-DarkUiCol/80">
                   <h3 className="font-semibold text-center my-4">
                     {`${recipe.name.charAt(0).toUpperCase()}${recipe.name.slice(
                       1
