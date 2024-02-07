@@ -32,11 +32,9 @@ const ResultPage = () => {
     }
 
     const { ENERC_KCAL } = selectedFood.food.nutrients;
-    const calories = amount * (ENERC_KCAL / 100);
+    const calories = Math.round(amount * (ENERC_KCAL / 100));
 
-    const message = `<p>${amount}g of ${
-      selectedFood.food.label
-    }</p><p>contains ${calories.toFixed(2)} cal</p>`;
+    const message = `<p>${amount}g of ${selectedFood.food.label}</p><p>contains ${calories} cal</p>`;
     setCalculationMessage(message);
 
     if (session?.user?.email) {
@@ -49,7 +47,6 @@ const ResultPage = () => {
           calories,
           dateConsumed,
         });
-        console.log("Food consumption data saved successfully.");
       } catch (error) {
         console.error("Error saving food consumption data:", error);
       }
