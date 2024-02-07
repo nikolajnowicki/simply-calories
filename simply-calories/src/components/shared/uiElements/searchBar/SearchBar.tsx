@@ -28,7 +28,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
       );
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched data:", data);
         setResults(data);
         router.push("/result");
         reset();
@@ -42,8 +41,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
-      <div className="relative flex items-center pt-3 pb-2 z-5 mx-auto">
-        <div className="relative flex-grow my-2">
+      <div className="relative flex items-center pt-3 md:pb-2 z-5 mx-auto ">
+        <div className="relative flex-grow md:my-2 ">
           <Controller
             name="query"
             control={control}

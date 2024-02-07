@@ -4,9 +4,7 @@ import { SearchBar } from "../shared/uiElements/searchBar/SearchBar";
 import { DesktopLogo } from "./NavBar/DesktopLogo";
 import { NavBar } from "./NavBar/NavBar";
 
-const handleSearch = async (query: string) => {
-  console.log("Search query:", query);
-};
+const handleSearch = async (query: string) => {};
 
 export const Header = () => {
   return (

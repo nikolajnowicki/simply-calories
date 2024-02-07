@@ -50,7 +50,7 @@ export const UserButton = () => {
           {userMenuItems.map((item, index) => (
             <li
               key={index}
-              className="border-b border-gray-100 dark:border-gray-700 last:border-0"
+              className="border-b border-LightTextCol/50 dark:border-DarkTextCol/50 dark:border-gray-700 last:border-0"
             >
               <Link href={item.href} passHref>
                 <div className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer">
