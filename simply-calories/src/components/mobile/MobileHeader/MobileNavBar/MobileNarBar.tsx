@@ -1,15 +1,13 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useModal } from "@/hooks/useModal";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { MobileLogo } from "../../MobileLogo/MobileLogo";
 import ThemeSwitcher from "@/components/shared/ThemeSwitcher";
 import LoginModal from "@/components/shared/modals/Login/LoginModal";
 import RegisterModal from "@/components/shared/modals/Register/RegisterModal";
 import { RegisterButton } from "@/components/desktop/NavBar/RegisterButton";
 import { LogInButton } from "@/components/desktop/NavBar/LoginButton";
-import { signOut } from "next-auth/react";
 
 const publicMenuItems = [
   { text: "Home", href: "/" },
@@ -40,6 +38,17 @@ const MobileNavBar: React.FC = () => {
   } = useModal();
   const { data: session } = useSession();
 
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (isActive && !(event.target as Element).closest(".menu-container")) {
+        setIsActive(false);
+      }
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [isActive]);
+
   const handleLogout = async () => {
     await signOut({ redirect: false });
   };
@@ -48,7 +57,7 @@ const MobileNavBar: React.FC = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between w-full relative pr-4 shadow-md text-LightTextCol/90 bg-LightUiCol dark:text-DarkTextCol/90 dark:bg-DarkUiCol">
+      <div className="menu-container flex items-center justify-between w-full relative pr-4 shadow-md text-LightTextCol/90 bg-LightUiCol dark:text-DarkTextCol/90 dark:bg-DarkUiCol">
         <MobileLogo />
 
         <div
@@ -69,11 +78,12 @@ const MobileNavBar: React.FC = () => {
         >
           <div className="mt-16">
             {menuItems.map((item, index) => (
-              <Link key={index} href={item.href} passHref>
-                <div className="p-4 text-gray-700 hover:bg-gray-100 dark:text-DarkTextCol dark:hover:text-DarkTextCol2 dark:hover:bg-transparent cursor-pointer">
-                  {item.text}
-                </div>
-              </Link>
+              <div
+                key={index}
+                className="p-4 text-gray-700 hover:bg-gray-100 dark:text-DarkTextCol dark:hover:text-DarkTextCol2 dark:hover:bg-transparent cursor-pointer"
+              >
+                <Link href={item.href}>{item.text}</Link>
+              </div>
             ))}
             {session && (
               <div
