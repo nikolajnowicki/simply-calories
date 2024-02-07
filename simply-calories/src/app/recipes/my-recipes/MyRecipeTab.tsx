@@ -15,7 +15,6 @@ const MyRecipeTab: React.FC = () => {
 
   useEffect(() => {
     if (!userData && session?.user?.email) {
-      console.log("Fetching user data...");
       fetchUserData(session.user.email)
         .then((data) => {
           if (data) {

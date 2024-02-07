@@ -14,7 +14,6 @@ export default function CalorieTracker() {
   useEffect(() => {
     if (session && session.user && session.user.email) {
       fetchCalorieData(session.user.email).then((data: User) => {
-        console.log("User Data:", data);
         setUser(data);
         if (data && data.foodConsumption) {
           const today = new Date();
