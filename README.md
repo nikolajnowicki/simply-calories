@@ -2,6 +2,8 @@
 
 Simply Calories is my exam project and is a comprehensive calorie and fasting tracker app designed to help you manage your diet and fasting schedules effectively. Built with the latest web technologies, it offers a user-friendly interface and powerful features to monitor your calorie intake and track fasting periods. And best of all it is free to use!
 
+You can check out the project here: https://simply-calories.vercel.app/
+
 ## Features
 
 - **Calorie Tracking:** Easily log your daily calorie intake and monitor your diet.
